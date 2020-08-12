@@ -1,12 +1,12 @@
-<h2>Binder Launcher - 3</h2>
+<h2>Binder Launcher - 4</h2>
 
 <p>
  
 <pre>
 <script> 
 
-  console.log('Binder Launcher');
-  document.write('docuement.referrer: ', document.referrer, '\n');
+
+  // document.write('docuement.referrer: ', document.referrer, '\n');
  
   referrer = document.referrer.split('/');
  
@@ -16,6 +16,9 @@
   document.write('site: ', site, '\n');
   document.write('user: ', user, '\n');
   document.write('repo: ', repo, '\n');
+
+  launch = 'http://mybinder.org/v2/gh/' + user + '/' + repo + '/master?urlpath=rstudio'
+  document.write('launch: ', launch, '\n');
 
 </script>
 
