@@ -2,7 +2,7 @@
 <html>
 <body>
 
-<canvas id="myCanvas" width="1000" height="640" style="border:1px solid #d3d3d3;">
+<canvas id="myCanvas" width="900" height="640" style="border:1px solid #d3d3d3;">
 Your browser does not support the HTML5 canvas tag.</canvas>
 
 <script>
@@ -16,13 +16,14 @@ var RADIUS = 100;
 var CROSS_HAIR = 1.2
 
 // Plot
-var PX_Offset = 30;
+var PX_Offset = 70;
 var PX = CX + RADIUS * CROSS_HAIR + PX_Offset;
 var PY = CY;
-var P_width = 500;
+var P_width = 400;
 var P_height = RADIUS;
 var PX_scale = P_width / (2 * Math.PI);
 var PY_scale = P_height / 1;
+var P_OVER = 50;
 
 var DOT = 3;
 
@@ -34,7 +35,7 @@ var TAN_COLOUR = "purple";
 var TAN_MAX = 3.1;
 
 var FINE = 0.3;
-var STRONG = 3;
+var STRONG = 2;
 
 var angle = Math.PI / 3;
 
@@ -62,6 +63,16 @@ function circle(x, y, colour) {
   ctx.fill();
 }
 
+function tickMark(x, size) {
+  ctx.beginPath();
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = OUTLINE_COLOUR;
+  
+  ctx.moveTo(PX + P_width / (2 * Math.PI) * x, PY - size);
+  ctx.lineTo(PX + P_width / (2 * Math.PI) * x, PY + size);
+  ctx.stroke();
+}
+  
 function draw() {
 
 //ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -75,23 +86,34 @@ ctx.strokeStyle = OUTLINE_COLOUR;
 ctx.arc(CX, CY, RADIUS, 0, 2 * Math.PI);
 
 
-
 // Circle X axis & Y axis
 ctx.moveTo(CX - RADIUS * CROSS_HAIR, CY);
 ctx.lineTo(CX + RADIUS * CROSS_HAIR, CY);
 
 ctx.moveTo(CX, CY - RADIUS * CROSS_HAIR);
 ctx.lineTo(CX, CY + RADIUS * CROSS_HAIR);
+ctx.stroke();
 
 
 // Plot Axis
-ctx.moveTo(PX - 10, PY);
-ctx.lineTo(PX + P_width, PY);
-ctx.moveTo(PX, PY - P_height * CROSS_HAIR);
-ctx.lineTo(PX, PY + P_height * CROSS_HAIR);
+ctx.beginPath();
+ctx.lineWidth = 2;
+ctx.moveTo(PX - P_OVER, PY);
+ctx.lineTo(PX + P_width + P_OVER, PY);
+ctx.moveTo(PX, PY - P_height * 1.8);
+ctx.lineTo(PX, PY + P_height * 1.8);
+ctx.stroke();
+
+// tickmarks
+tickMark( 0.25 * 2 * Math.PI, 10);
+tickMark( 0.50 * 2 * Math.PI, 05);
+tickMark( 0.75 * 2 * Math.PI, 05);
+tickMark( 1.00 * 2 * Math.PI, 10);
 
 
 // tangent line
+ctx.beginPath();
+ctx.lineWidth = FINE;
 ctx.moveTo(CX + RADIUS, CY + P_height * TAN_MAX);
 ctx.lineTo(CX + RADIUS, CY - P_height * TAN_MAX);
 ctx.stroke();
@@ -99,24 +121,30 @@ ctx.stroke();
 
 
 // Plots
-ctx.lineWidth = FINE;
+ctx.lineWidth = FINE * 3;
 
 // sin() graph
 ctx.beginPath();
 ctx.strokeStyle = SIN_COLOUR;
-ctx.moveTo(PX, PY);
-for (point = 0;  point < P_width; point++) {
+
+w = (-P_OVER / P_width) * 2 * Math.PI;
+ctx.moveTo(PX - P_OVER,
+           PY - Math.sin(w) * P_height);
+for (point = -P_OVER;  point < P_width + P_OVER; point++) {
   w = (point / P_width) * 2 * Math.PI;
   ctx.lineTo(PX + point,
              PY - Math.sin(w) * P_height);
 }
 ctx.stroke();
 
+
 // cos() graph
 ctx.beginPath();
 ctx.strokeStyle = COS_COLOUR;
-ctx.moveTo(PX, PY);
-for (point = 0;  point < P_width; point++) {
+w = (-P_OVER / P_width) * 2 * Math.PI;
+ctx.moveTo(PX - P_OVER,
+           PY - Math.cos(w) * P_height);
+for (point = -P_OVER;  point < P_width + P_OVER; point++) {
   w = (point / P_width) * 2 * Math.PI;
   ctx.lineTo(PX + point,
              PY - Math.cos(w) * P_height);
@@ -127,8 +155,10 @@ ctx.stroke();
 // tan() graph
 ctx.beginPath();
 ctx.strokeStyle = TAN_COLOUR;
-ctx.moveTo(PX, PY);
-for (point = 0;  point < P_width; point++) {
+w = (-P_OVER / P_width) * 2 * Math.PI;
+ctx.moveTo(PX - P_OVER,
+           PY - Math.tan(w) * P_height);
+for (point = -P_OVER;  point < P_width + P_OVER; point++) {
   w = (point / P_width) * 2 * Math.PI;
   if ( Math.abs(Math.tan(w)) < TAN_MAX) {
     ctx.lineTo(PX + point, PY - Math.tan(w) * P_height);
