@@ -107,8 +107,8 @@ ctx.stroke();
 // tickmarks
 tickMark( 0.25 * 2 * Math.PI, 10);
 tickMark( 0.50 * 2 * Math.PI, 05);
-tickMark( 0.75 * 2 * Math.PI, 05);
-tickMark( 1.00 * 2 * Math.PI, 10);
+tickMark( 0.75 * 2 * Math.PI, 10);
+tickMark( 1.00 * 2 * Math.PI, 05);
 
 
 // tangent line
@@ -117,7 +117,6 @@ ctx.lineWidth = FINE;
 ctx.moveTo(CX + RADIUS, CY + P_height * TAN_MAX);
 ctx.lineTo(CX + RADIUS, CY - P_height * TAN_MAX);
 ctx.stroke();
-
 
 
 // Plots
@@ -152,8 +151,26 @@ for (point = -P_OVER;  point < P_width + P_OVER; point++) {
 ctx.stroke();
 
 
+ctx.beginPath();
+ctx.strokeStyle = 'rgba(0, 128, 0, 0.2)';
+ctx.lineWidth = 10;
+
+w = (0 / P_width) * 2 * Math.PI;
+ctx.moveTo(PX,
+           PY - Math.cos(w) * P_height);
+
+for (point = 0;  point < P_width; point++) {
+  w = (point / P_width) * 2 * Math.PI;
+  if (w > angle) break;
+  ctx.lineTo(PX + point,
+             PY - Math.cos(w) * P_height);
+}
+ctx.stroke();
+
+
 // tan() graph
 ctx.beginPath();
+ctx.lineWidth = FINE;
 ctx.strokeStyle = TAN_COLOUR;
 w = (-P_OVER / P_width) * 2 * Math.PI;
 ctx.moveTo(PX - P_OVER,
@@ -193,6 +210,14 @@ circle(CX + RADIUS * Math.cos(angle),
 circle(PX + PX_scale * angle,
        PY,
        ANGLE_COLOUR);
+       
+// angle line
+ctx.beginPath();
+ctx.setLineDash([]);
+ctx.strokeStyle = ANGLE_COLOUR;
+ctx.moveTo(PX + PX_scale * angle, PY - P_height *2 );
+ctx.lineTo(PX + PX_scale * angle, PY + P_height * 2);
+ctx.stroke();
 
        
 // sin(), cos(), tan() marker
