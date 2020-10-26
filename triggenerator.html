@@ -9,6 +9,10 @@ Your browser does not support the HTML5 canvas tag.</canvas>
 var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
 
+var SIN = 0;
+var COS = 0;
+var TAN = 0;
+
 // Circle
 var CX = 140;
 var CY = 640 / 2;
@@ -129,6 +133,9 @@ ctx.stroke();
 ctx.lineWidth = FINE * 2;
 
 // sin() graph
+
+if (SIN) {
+
 ctx.beginPath();
 ctx.strokeStyle = SIN_COLOUR;
 
@@ -153,8 +160,12 @@ for (point = 0;  point < P_width; point++) {
 
 ctx.stroke();
 
+}
+
 
 // cos() graph
+if (COS) {
+
 ctx.beginPath();
 ctx.strokeStyle = COS_COLOUR;
 ctx.lineWidth = FINE;
@@ -178,9 +189,10 @@ for (point = 0;  point < P_width; point++) {
 }
 
 ctx.stroke();
-
+}
 
 // tan() graph
+if (TAN) {
 ctx.beginPath();
 ctx.lineWidth = FINE;
 ctx.strokeStyle = TAN_COLOUR;
@@ -230,6 +242,7 @@ ctx.lineTo(PX + 3 * P_width / 4, PY + TAN_MAX * P_height);
 ctx.setLineDash([5, 3])
 ctx.stroke();
 
+}
 
 // Markers
 ctx.beginPath();
@@ -349,7 +362,10 @@ ctx.stroke();
 
 <div style="align: center;">
 
-<span> sin() </span>
+Trig Function Generator : 
+<span style="color: blue" onclick="SIN = !SIN;"> sin() </span> |
+<span style="color: blue" onclick="COS = !COS;"> cos() </span> |
+<span style="color: blue" onclick="TAN = !TAN;"> tan() </span>
 
 </div>
 
