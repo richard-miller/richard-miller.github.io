@@ -53,6 +53,8 @@ var tick = function(){
     setTimeout(tick, 50);
 }
 
+
+// First tick()
 tick();
 
 
@@ -71,6 +73,10 @@ function tickMark(x, size) {
   ctx.moveTo(PX + P_width / (2 * Math.PI) * x, PY - size);
   ctx.lineTo(PX + P_width / (2 * Math.PI) * x, PY + size);
   ctx.stroke();
+}
+
+function point2angle(p) {
+  return (p / P_width) * 2 * Math.PI;
 }
   
 function draw() {
@@ -126,28 +132,37 @@ ctx.lineWidth = FINE * 2;
 ctx.beginPath();
 ctx.strokeStyle = SIN_COLOUR;
 
-w = (-P_OVER / P_width) * 2 * Math.PI;
-ctx.moveTo(PX - P_OVER,
-           PY - Math.sin(w) * P_height);
+
+ctx.moveTo(PX - P_OVER, PY - Math.sin(point2angle(-P_OVER)) * P_height);
 for (point = -P_OVER;  point < P_width + P_OVER; point++) {
-  w = (point / P_width) * 2 * Math.PI;
-  ctx.lineTo(PX + point,
-             PY - Math.sin(w) * P_height);
+  ctx.lineTo(PX + point, PY - Math.sin(point2angle(point)) * P_height);
 }
+
+ctx.stroke();
+
+ctx.beginPath();
+ctx.strokeStyle = 'rgba(255, 0, 0, 0.2)';
+ctx.lineWidth = 10;
+
+ctx.moveTo(PX, PY - Math.sin(point2angle(0)) * P_height);
+for (point = 0;  point < P_width; point++) {
+  w = point2angle(point)
+  if (w > angle) break;
+  ctx.lineTo(PX + point, PY - Math.sin(w) * P_height);
+}
+
 ctx.stroke();
 
 
 // cos() graph
 ctx.beginPath();
 ctx.strokeStyle = COS_COLOUR;
-w = (-P_OVER / P_width) * 2 * Math.PI;
-ctx.moveTo(PX - P_OVER,
-           PY - Math.cos(w) * P_height);
-for (point = -P_OVER;  point < P_width + P_OVER; point++) {
-  w = (point / P_width) * 2 * Math.PI;
-  ctx.lineTo(PX + point,
-             PY - Math.cos(w) * P_height);
-}
+ctx.lineWidth = FINE;
+
+ctx.moveTo(PX - P_OVER, PY - Math.cos(point2angle(-P_OVER)) * P_height);
+for (point = -P_OVER;  point < P_width + P_OVER; point++) 
+  ctx.lineTo(PX + point, PY - Math.cos(point2angle(point)) * P_height);
+
 ctx.stroke();
 
 
@@ -155,16 +170,13 @@ ctx.beginPath();
 ctx.strokeStyle = 'rgba(0, 128, 0, 0.2)';
 ctx.lineWidth = 10;
 
-w = (0 / P_width) * 2 * Math.PI;
-ctx.moveTo(PX,
-           PY - Math.cos(w) * P_height);
-
+ctx.moveTo(PX, PY - Math.cos(point2angle(0)) * P_height);
 for (point = 0;  point < P_width; point++) {
-  w = (point / P_width) * 2 * Math.PI;
+  w = point2angle(point)
   if (w > angle) break;
-  ctx.lineTo(PX + point,
-             PY - Math.cos(w) * P_height);
+  ctx.lineTo(PX + point, PY - Math.cos(w) * P_height);
 }
+
 ctx.stroke();
 
 
@@ -172,11 +184,10 @@ ctx.stroke();
 ctx.beginPath();
 ctx.lineWidth = FINE;
 ctx.strokeStyle = TAN_COLOUR;
-w = (-P_OVER / P_width) * 2 * Math.PI;
-ctx.moveTo(PX - P_OVER,
-           PY - Math.tan(w) * P_height);
+
+ctx.moveTo(PX - P_OVER, PY - Math.tan(point2angle(-P_OVER)) * P_height);
 for (point = -P_OVER;  point < P_width + P_OVER; point++) {
-  w = (point / P_width) * 2 * Math.PI;
+  w = point2angle(point)
   if ( Math.abs(Math.tan(w)) < TAN_MAX) {
     ctx.lineTo(PX + point, PY - Math.tan(w) * P_height);
   } 
@@ -184,10 +195,33 @@ for (point = -P_OVER;  point < P_width + P_OVER; point++) {
      ctx.moveTo(PX + point, PY + TAN_MAX * P_height);
   }
 }
+
 ctx.stroke();
+
+ctx.beginPath();
+ctx.lineWidth = 10;
+ctx.strokeStyle = 'rgba(255, 0, 255, 0.2)';
+
+ctx.moveTo(PX - 0, PY - Math.tan(point2angle(0)) * P_height);
+for (point = 0;  point < P_width + P_OVER; point++) {
+  w = point2angle(point)
+  if (w > angle)
+    break;
+  if ( Math.abs(Math.tan(w)) < TAN_MAX) {
+    ctx.lineTo(PX + point, PY - Math.tan(w) * P_height);
+  } 
+  else {
+     ctx.moveTo(PX + point, PY + TAN_MAX * P_height);
+  }
+}
+
+ctx.stroke();
+
 
 // tan() asomtotes
 ctx.beginPath();
+ctx.lineWidth = FINE;
+
 ctx.moveTo(PX + P_width / 4, PY - TAN_MAX * P_height);
 ctx.lineTo(PX + P_width / 4, PY + TAN_MAX * P_height);
 
