@@ -270,13 +270,12 @@ ctx.stroke();
 
        
 // sin(), cos(), tan() marker
-circle(PX + PX_scale * angle,
-       PY - Math.sin(angle) * P_height,
+if (SIN) circle(PX + PX_scale * angle,PY - Math.sin(angle) * P_height,
        SIN_COLOUR);
-circle(PX + PX_scale * angle,
+if (COS) circle(PX + PX_scale * angle,
        PY - Math.cos(angle) * P_height,
        COS_COLOUR);
-circle(PX + PX_scale * angle,
+if (TAN) circle(PX + PX_scale * angle,
        PY - Math.tan(angle) * P_height,
        TAN_COLOUR);
        
@@ -285,6 +284,8 @@ ctx.lineWidth = STRONG;
 ctx.setLineDash([]);
 
 // adjacent
+
+if (COS) {
 ctx.beginPath();
 ctx.strokeStyle = COS_COLOUR;
 ctx.lineWidth = STRONG;
@@ -305,9 +306,11 @@ ctx.stroke();
 circle(CX,
        CY - RADIUS * Math.cos(angle),
        COS_COLOUR);
- 
+} 
 
 // opposite
+
+if (SIN) {
 ctx.beginPath();
 ctx.lineWidth = STRONG;
 ctx.strokeStyle = SIN_COLOUR;
@@ -315,6 +318,7 @@ ctx.strokeStyle = SIN_COLOUR;
 ctx.moveTo(CX + RADIUS * Math.cos(angle), CY);
 ctx.lineTo(CX + RADIUS * Math.cos(angle), CY - RADIUS * Math.sin(angle));
 ctx.stroke();
+}
 
 // hypot
 ctx.beginPath();
@@ -327,6 +331,8 @@ ctx.stroke();
 
 
 // tangent
+
+if (TAN) {
 ctx.beginPath();
 ctx.strokeStyle = TAN_COLOUR;
 ctx.lineWidth = 1;
@@ -345,6 +351,7 @@ ctx.lineTo(CX + RADIUS,
 ctx.stroke();
 
 circle(CX + RADIUS, CY - RADIUS * Math.tan(angle), TAN_COLOUR);
+}
 
 // arc
 ctx.beginPath();
