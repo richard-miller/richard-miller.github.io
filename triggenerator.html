@@ -1,14 +1,20 @@
+<!DOCTYPE html>
+<html>
+<body>
 
-Result Size: 862 x 557
-STRONG
+<canvas id="myCanvas" width="900" height="640" style="border:1px solid #d3d3d3;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+
+<script>
+var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
-​
+
 // Circle
 var CX = 140;
 var CY = 640 / 2;
 var RADIUS = 100;
 var CROSS_HAIR = 1.2
-​
+
 // Plot
 var PX_Offset = 70;
 var PX = CX + RADIUS * CROSS_HAIR + PX_Offset;
@@ -18,25 +24,25 @@ var P_height = RADIUS;
 var PX_scale = P_width / (2 * Math.PI);
 var PY_scale = P_height / 1;
 var P_OVER = 50;
-​
+
 var DOT = 3;
-​
+
 var OUTLINE_COLOUR = "grey";
 var ANGLE_COLOUR = "blue";
 var SIN_COLOUR = "red";
 var COS_COLOUR = "green";
 var TAN_COLOUR = "purple";
 var TAN_MAX = 3.1;
-​
+
 var FINE = 0.3;
 var STRONG = 2;
-​
+
 var angle = Math.PI / 3;
-​
+
 angle = 0.0;
-​
+
 var tick = function(){
-​
+
     ctx.clearRect(0, 0, 2400, 2400);
     draw();
     
@@ -46,10 +52,306 @@ var tick = function(){
     }
     setTimeout(tick, 50);
 }
-​
-​
+
+
 // First tick()
 tick();
-​
-​
+
+
 function circle(x, y, colour) {
+  ctx.beginPath();
+  ctx.arc(x, y, DOT, 0, 2 * Math.PI);
+  ctx.fillStyle=colour;
+  ctx.fill();
+}
+
+function tickMark(x, size) {
+  ctx.beginPath();
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = OUTLINE_COLOUR;
+  
+  ctx.moveTo(PX + P_width / (2 * Math.PI) * x, PY - size);
+  ctx.lineTo(PX + P_width / (2 * Math.PI) * x, PY + size);
+  ctx.stroke();
+}
+
+function point2angle(p) {
+  return (p / P_width) * 2 * Math.PI;
+}
+  
+function draw() {
+
+//ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+// Background bits
+ctx.beginPath();
+ctx.lineWidth = STRONG / 2;
+ctx.strokeStyle = OUTLINE_COLOUR;
+
+// Circle
+ctx.arc(CX, CY, RADIUS, 0, 2 * Math.PI);
+
+
+// Circle X axis & Y axis
+ctx.moveTo(CX - RADIUS * CROSS_HAIR, CY);
+ctx.lineTo(CX + RADIUS * CROSS_HAIR, CY);
+
+ctx.moveTo(CX, CY - RADIUS * CROSS_HAIR);
+ctx.lineTo(CX, CY + RADIUS * CROSS_HAIR);
+ctx.stroke();
+
+
+// Plot Axis
+ctx.beginPath();
+ctx.lineWidth = 2;
+ctx.moveTo(PX - P_OVER, PY);
+ctx.lineTo(PX + P_width + P_OVER, PY);
+ctx.moveTo(PX, PY - P_height * 1.8);
+ctx.lineTo(PX, PY + P_height * 1.8);
+ctx.stroke();
+
+// tickmarks
+tickMark( 0.25 * 2 * Math.PI, 10);
+tickMark( 0.50 * 2 * Math.PI, 05);
+tickMark( 0.75 * 2 * Math.PI, 10);
+tickMark( 1.00 * 2 * Math.PI, 05);
+
+
+// tangent line
+ctx.beginPath();
+ctx.lineWidth = STRONG/2;
+ctx.moveTo(CX + RADIUS, CY + P_height * TAN_MAX);
+ctx.lineTo(CX + RADIUS, CY - P_height * TAN_MAX);
+ctx.stroke();
+
+
+// Plots
+ctx.lineWidth = FINE * 2;
+
+// sin() graph
+ctx.beginPath();
+ctx.strokeStyle = SIN_COLOUR;
+
+
+ctx.moveTo(PX - P_OVER, PY - Math.sin(point2angle(-P_OVER)) * P_height);
+for (point = -P_OVER;  point < P_width + P_OVER; point++) {
+  ctx.lineTo(PX + point, PY - Math.sin(point2angle(point)) * P_height);
+}
+
+ctx.stroke();
+
+ctx.beginPath();
+ctx.strokeStyle = 'rgba(255, 0, 0, 0.2)';
+ctx.lineWidth = 10;
+
+ctx.moveTo(PX, PY - Math.sin(point2angle(0)) * P_height);
+for (point = 0;  point < P_width; point++) {
+  w = point2angle(point)
+  if (w > angle) break;
+  ctx.lineTo(PX + point, PY - Math.sin(w) * P_height);
+}
+
+ctx.stroke();
+
+
+// cos() graph
+ctx.beginPath();
+ctx.strokeStyle = COS_COLOUR;
+ctx.lineWidth = FINE;
+
+ctx.moveTo(PX - P_OVER, PY - Math.cos(point2angle(-P_OVER)) * P_height);
+for (point = -P_OVER;  point < P_width + P_OVER; point++) 
+  ctx.lineTo(PX + point, PY - Math.cos(point2angle(point)) * P_height);
+
+ctx.stroke();
+
+
+ctx.beginPath();
+ctx.strokeStyle = 'rgba(0, 128, 0, 0.2)';
+ctx.lineWidth = 10;
+
+ctx.moveTo(PX, PY - Math.cos(point2angle(0)) * P_height);
+for (point = 0;  point < P_width; point++) {
+  w = point2angle(point)
+  if (w > angle) break;
+  ctx.lineTo(PX + point, PY - Math.cos(w) * P_height);
+}
+
+ctx.stroke();
+
+
+// tan() graph
+ctx.beginPath();
+ctx.lineWidth = FINE;
+ctx.strokeStyle = TAN_COLOUR;
+
+ctx.moveTo(PX - P_OVER, PY - Math.tan(point2angle(-P_OVER)) * P_height);
+for (point = -P_OVER;  point < P_width + P_OVER; point++) {
+  w = point2angle(point)
+  if ( Math.abs(Math.tan(w)) < TAN_MAX) {
+    ctx.lineTo(PX + point, PY - Math.tan(w) * P_height);
+  } 
+  else {
+     ctx.moveTo(PX + point, PY + TAN_MAX * P_height);
+  }
+}
+
+ctx.stroke();
+
+ctx.beginPath();
+ctx.lineWidth = 10;
+ctx.strokeStyle = 'rgba(255, 0, 255, 0.2)';
+
+ctx.moveTo(PX - 0, PY - Math.tan(point2angle(0)) * P_height);
+for (point = 0;  point < P_width + P_OVER; point++) {
+  w = point2angle(point)
+  if (w > angle)
+    break;
+  if ( Math.abs(Math.tan(w)) < TAN_MAX) {
+    ctx.lineTo(PX + point, PY - Math.tan(w) * P_height);
+  } 
+  else {
+     ctx.moveTo(PX + point, PY + TAN_MAX * P_height);
+  }
+}
+
+ctx.stroke();
+
+
+// tan() asomtotes
+ctx.beginPath();
+ctx.lineWidth = STRONG;
+
+ctx.moveTo(PX + P_width / 4, PY - TAN_MAX * P_height);
+ctx.lineTo(PX + P_width / 4, PY + TAN_MAX * P_height);
+
+ctx.moveTo(PX + 3 * P_width / 4, PY - TAN_MAX * P_height);
+ctx.lineTo(PX + 3 * P_width / 4, PY + TAN_MAX * P_height);
+ctx.setLineDash([5, 3])
+ctx.stroke();
+
+
+// Markers
+ctx.beginPath();
+
+
+// Circle marker
+circle(CX + RADIUS * Math.cos(angle),
+       CY - RADIUS * Math.sin(angle),
+       SIN_COLOUR);
+
+// Plot marker
+circle(PX + PX_scale * angle,
+       PY,
+       ANGLE_COLOUR);
+       
+// angle line
+ctx.beginPath();
+ctx.setLineDash([]);
+ctx.strokeStyle = ANGLE_COLOUR;
+ctx.lineWidth = 1;
+
+ctx.moveTo(PX + PX_scale * angle, PY - P_height *2 );
+ctx.lineTo(PX + PX_scale * angle, PY + P_height * 2);
+ctx.stroke();
+
+       
+// sin(), cos(), tan() marker
+circle(PX + PX_scale * angle,
+       PY - Math.sin(angle) * P_height,
+       SIN_COLOUR);
+circle(PX + PX_scale * angle,
+       PY - Math.cos(angle) * P_height,
+       COS_COLOUR);
+circle(PX + PX_scale * angle,
+       PY - Math.tan(angle) * P_height,
+       TAN_COLOUR);
+       
+// lines
+ctx.lineWidth = STRONG;
+ctx.setLineDash([]);
+
+// adjacent
+ctx.beginPath();
+ctx.strokeStyle = COS_COLOUR;
+ctx.lineWidth = STRONG;
+
+
+ctx.moveTo(CX, CY);
+ctx.lineTo(CX + RADIUS * Math.cos(angle), CY);
+ctx.stroke();
+
+ctx.beginPath();
+ctx.strokeStyle = COS_COLOUR;
+ctx.lineWidth = 0.6;
+
+ctx.moveTo(CX, CY);
+ctx.lineTo(CX , CY - RADIUS * Math.cos(angle));
+ctx.stroke();
+
+circle(CX,
+       CY - RADIUS * Math.cos(angle),
+       COS_COLOUR);
+ 
+
+// opposite
+ctx.beginPath();
+ctx.lineWidth = STRONG;
+ctx.strokeStyle = SIN_COLOUR;
+
+ctx.moveTo(CX + RADIUS * Math.cos(angle), CY);
+ctx.lineTo(CX + RADIUS * Math.cos(angle), CY - RADIUS * Math.sin(angle));
+ctx.stroke();
+
+// hypot
+ctx.beginPath();
+ctx.strokeStyle = ANGLE_COLOUR;
+
+ctx.moveTo(CX, CY);
+ctx.lineTo(CX + RADIUS * Math.cos(angle), CY - RADIUS * Math.sin(angle));
+ctx.stroke();
+
+
+
+// tangent
+ctx.beginPath();
+ctx.strokeStyle = TAN_COLOUR;
+ctx.lineWidth = 1;
+
+ctx.moveTo(CX + RADIUS * Math.cos(angle), CY - RADIUS * Math.sin(angle))
+
+ctx.lineTo(CX + RADIUS, CY - RADIUS * Math.tan(angle));
+
+ctx.moveTo(CX + RADIUS, CY);
+ctx.lineTo(CX + RADIUS, 
+           CY - Math.max(
+                  Math.min(RADIUS * Math.tan(angle),TAN_MAX *P_height),
+                  - TAN_MAX * P_height
+                )
+          );
+ctx.stroke();
+
+circle(CX + RADIUS, CY - RADIUS * Math.tan(angle), TAN_COLOUR);
+
+// arc
+ctx.beginPath();
+ctx.strokeStyle = ANGLE_COLOUR;
+ctx.lineWidth = 0.5;
+ctx.arc(CX, CY, RADIUS/2, 0, -angle, 1);
+ctx.stroke();
+
+
+}     
+
+
+
+</script> 
+
+<div style="align: center;">
+
+<span> sin() </span>
+
+</div>
+
+</body>
+</html>
