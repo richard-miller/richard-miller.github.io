@@ -18,7 +18,7 @@
 
 </div>
 
-<canvas id="myCanvas" width="900" height="640" style="border:1px solid #d3d3d3;">
+<canvas id="myCanvas" width="1024" height="640" style="border:1px solid #d3d3d3;">
 Your browser does not support the HTML5 canvas tag.</canvas>
 
 <script>
@@ -32,16 +32,16 @@ var TAN = 0;
 var PAUSE = false;
 
 // Circle
-var CX = 140;
+var CX = 220;
 var CY = 640 / 2;
 var RADIUS = 100;
-var CROSS_HAIR = 1.2
+var CROSS_HAIR = 1.6
 
 // Plot
-var PX_Offset = 70;
+var PX_Offset = 140;
 var PX = CX + RADIUS * CROSS_HAIR + PX_Offset;
 var PY = CY;
-var P_width = 400;
+var P_width = 430;
 var P_height = RADIUS;
 var PX_scale = P_width / (2 * Math.PI);
 var PY_scale = P_height / 1;
