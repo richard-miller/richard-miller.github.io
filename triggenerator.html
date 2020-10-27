@@ -147,6 +147,8 @@ ctx.fillText("\u03C0", PX + P_width / 2 , PY + 20);
 ctx.fillText("3\u03C0/2", PX + P_width * (3/4) , PY + 20);
 ctx.fillText("2\u03C0", PX + P_width , PY + 20);
 
+ctx.fillText("\u03B8", PX + P_width + 70 , PY );
+
 ctx.fillText("\u03B8 =", CX - RADIUS, CY - RADIUS - 20);
 ctx.fillText(angle.toString().substring(0, 5), CX - RADIUS + 30, CY - RADIUS - 20);
 
@@ -427,19 +429,23 @@ circle(CX,
 
 // opposite
 
-if (SIN) {
 ctx.beginPath();
-ctx.lineWidth = STRONG;
 ctx.strokeStyle = SIN_COLOUR;
+
+if (SIN) 
+  ctx.lineWidth = STRONG;
+else 
+  ctx.lineWidth = FINE;
 
 ctx.moveTo(CX + RADIUS * Math.cos(angle), CY);
 ctx.lineTo(CX + RADIUS * Math.cos(angle), CY - RADIUS * Math.sin(angle));
 ctx.stroke();
-}
+
 
 // hypot
 ctx.beginPath();
 ctx.strokeStyle = ANGLE_COLOUR;
+ctx.lineWidth = STRONG;
 
 ctx.moveTo(CX, CY);
 ctx.lineTo(CX + RADIUS * Math.cos(angle), CY - RADIUS * Math.sin(angle));
