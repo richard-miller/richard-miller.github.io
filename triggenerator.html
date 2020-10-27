@@ -8,9 +8,11 @@
 <div style="font-family: Arial, Helvetica, sans-serif; padding: 10px;">
 
 <b>Trig Function Generator</b> : 
-<span style="color: blue" onclick="SIN = !SIN; draw();"> sin() </span> |
-<span style="color: blue" onclick="COS = !COS; draw()"> cos() </span> |
-<span style="color: blue" onclick="TAN = !TAN; draw()"> tan() </span>
+<span style="color: blue" onclick="SIN = !SIN; draw();"> sin &theta; </span> |
+<span style="color: blue" onclick="COS = !COS; draw()"> cos &theta;  </span> |
+<span style="color: blue" onclick="TAN = !TAN; draw()"> tan  &theta;  </span>
+
+
 
 <span style="color: blue" onclick="PAUSE = !PAUSE; if(!PAUSE) { tick(); this.innerHTML = PAUSE_ICON;} else this.innerHTML = PLAY_ICON;">
   <i style="padding: 5px;" class="icon-pause"></i>
@@ -129,6 +131,21 @@ ctx.lineTo(CX + RADIUS * CROSS_HAIR, CY);
 ctx.moveTo(CX, CY - RADIUS * CROSS_HAIR);
 ctx.lineTo(CX, CY + RADIUS * CROSS_HAIR);
 ctx.stroke();
+
+
+ctx.font = "15px Times";
+ctx.textBaseline = "middle";
+ctx.textAlign = "center";
+ctx.fillStyle = "grey";
+ctx.fillText("\u03C0", CX - RADIUS * 1.8, CY);
+ctx.fillText("0", CX + RADIUS * 1.8, CY);
+ctx.fillText("\u03C0/2", CX , CY - RADIUS * 1.8);
+ctx.fillText("3\u03C0/2", CX , CY + RADIUS * 1.8);
+
+ctx.fillText("\u03C0/2", PX + P_width / 4 , PY + 20);
+ctx.fillText("\u03C0", PX + P_width / 2 , PY + 20);
+ctx.fillText("3\u03C0/2", PX + P_width * (3/4) , PY + 20);
+ctx.fillText("2\u03C0", PX + P_width , PY + 20);
 
 
 // Plot Axis
@@ -356,7 +373,7 @@ if (COS) {
   ctx.stroke();
 }
 if (TAN) {
-  circle(PX + PX_scale * CROSS_HAIR,
+  circle(PX + PX_scale * angle,
          PY - Math.tan(angle) * P_height,
          TAN_COLOUR);
          
@@ -372,7 +389,8 @@ if (TAN) {
              PY - Math.tan(angle) * P_height);
 
   ctx.stroke();
-}       
+}
+
 // lines
 ctx.lineWidth = STRONG;
 ctx.setLineDash([]);
