@@ -147,6 +147,9 @@ ctx.fillText("\u03C0", PX + P_width / 2 , PY + 20);
 ctx.fillText("3\u03C0/2", PX + P_width * (3/4) , PY + 20);
 ctx.fillText("2\u03C0", PX + P_width , PY + 20);
 
+ctx.fillText("\u03B8 =", CX - RADIUS, CY - RADIUS);
+ctx.fillText(angle.toString().substring(1, 5), CX - RADIUS + 30, CY - RADIUS);
+
 
 // Plot Axis
 ctx.beginPath();
@@ -318,7 +321,7 @@ ctx.beginPath();
 // Circle marker
 circle(CX + RADIUS * Math.cos(angle),
        CY - RADIUS * Math.sin(angle),
-       ANGLE_COLOUR);
+       SIN_COLOUR);
 
 // Plot marker
 circle(PX + PX_scale * angle,
