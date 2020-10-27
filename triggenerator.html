@@ -1,6 +1,22 @@
 <!DOCTYPE html>
 <html>
-<body>
+<body >
+
+<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+
+
+<div style="font-family: Arial, Helvetica, sans-serif">
+
+<b>Trig Function Generator</b> : 
+<span style="color: blue" onclick="SIN = !SIN; draw();"> sin() </span> |
+<span style="color: blue" onclick="COS = !COS; draw()"> cos() </span> |
+<span style="color: blue" onclick="TAN = !TAN; draw()"> tan() </span>
+
+<span style="color: blue" onclick="PAUSE = !PAUSE; if(!PAUSE) tick();">
+  <i style="padding: 5px;" class="icon-play"></i>
+</span>
+
+</div>
 
 <canvas id="myCanvas" width="900" height="640" style="border:1px solid #d3d3d3;">
 Your browser does not support the HTML5 canvas tag.</canvas>
@@ -12,6 +28,8 @@ var ctx = c.getContext("2d");
 var SIN = 0;
 var COS = 0;
 var TAN = 0;
+
+var PAUSE = false;
 
 // Circle
 var CX = 140;
@@ -47,14 +65,15 @@ angle = 0.0;
 
 var tick = function(){
 
-    ctx.clearRect(0, 0, 2400, 2400);
     draw();
     
     angle += 0.008; 
     if (angle > 2 * Math.PI) {
         angle = 0.0;
     }
-    setTimeout(tick, 50);
+    if (!PAUSE) {
+      setTimeout(tick, 50);
+    }
 }
 
 
@@ -84,6 +103,8 @@ function point2angle(p) {
 }
   
 function draw() {
+
+ctx.clearRect(0, 0, 2400, 2400);
 
 //ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -121,13 +142,15 @@ tickMark( 0.75 * 2 * Math.PI, 10);
 tickMark( 1.00 * 2 * Math.PI, 05);
 
 
-// tangent line
+// tangent line w = 0
+
+/*
 ctx.beginPath();
 ctx.lineWidth = STRONG/2;
 ctx.moveTo(CX + RADIUS, CY + P_height * TAN_MAX);
 ctx.lineTo(CX + RADIUS, CY - P_height * TAN_MAX);
 ctx.stroke();
-
+*/
 
 // Plots
 ctx.lineWidth = FINE * 2;
@@ -242,6 +265,29 @@ ctx.lineTo(PX + 3 * P_width / 4, PY + TAN_MAX * P_height);
 ctx.setLineDash([5, 3])
 ctx.stroke();
 
+
+// tangent x interptor
+ctx.beginPath();
+ctx.strokeStyle = TAN_COLOUR;
+ctx.setLineDash([])
+ctx.lineWidth = STRONG;
+       
+
+TX = CX + RADIUS * Math.cos(angle);
+TY = CY - RADIUS * Math.sin(angle)
+
+ctx.moveTo(TX,
+           TY);
+ctx.lineTo(TX + RADIUS * Math.sin(angle) * Math.tan(angle),
+           TY + RADIUS * Math.cos(angle) * Math.tan(angle));
+
+ctx.stroke();
+           
+circle(TX + RADIUS * Math.sin(angle) * Math.tan(angle),
+       TY + RADIUS * Math.cos(angle) * Math.tan(angle),
+       TAN_COLOUR);
+
+
 }
 
 // Markers
@@ -251,7 +297,7 @@ ctx.beginPath();
 // Circle marker
 circle(CX + RADIUS * Math.cos(angle),
        CY - RADIUS * Math.sin(angle),
-       SIN_COLOUR);
+       ANGLE_COLOUR);
 
 // Plot marker
 circle(PX + PX_scale * angle,
@@ -328,6 +374,25 @@ ctx.moveTo(CX, CY);
 ctx.lineTo(CX + RADIUS * Math.cos(angle), CY - RADIUS * Math.sin(angle));
 ctx.stroke();
 
+// tangent to circle
+
+ctx.beginPath();
+ctx.strokeStyle = ANGLE_COLOUR;
+ctx.lineWidth = FINE;
+       
+
+TX = CX + RADIUS * Math.cos(angle);
+TY = CY - RADIUS * Math.sin(angle)
+
+ctx.moveTo(TX - RADIUS/2 * Math.sin(angle),
+           TY - RADIUS/2 * Math.cos(angle));
+ctx.lineTo(TX + RADIUS/2 * Math.sin(angle),
+           TY + RADIUS/2 * Math.cos(angle));
+
+ctx.stroke();
+
+
+
 
 
 // tangent
@@ -336,10 +401,16 @@ if (TAN) {
 ctx.beginPath();
 ctx.strokeStyle = TAN_COLOUR;
 ctx.lineWidth = 1;
+ctx.setLineDash([5, 3])
 
 ctx.moveTo(CX + RADIUS * Math.cos(angle), CY - RADIUS * Math.sin(angle))
 
 ctx.lineTo(CX + RADIUS, CY - RADIUS * Math.tan(angle));
+
+ctx.stroke();
+
+ctx.beginPath();
+ctx.setLineDash([])
 
 ctx.moveTo(CX + RADIUS, CY);
 ctx.lineTo(CX + RADIUS, 
@@ -367,14 +438,7 @@ ctx.stroke();
 
 </script> 
 
-<div style="align: center;">
 
-Trig Function Generator : 
-<span style="color: blue" onclick="SIN = !SIN;"> sin() </span> |
-<span style="color: blue" onclick="COS = !COS;"> cos() </span> |
-<span style="color: blue" onclick="TAN = !TAN;"> tan() </span>
-
-</div>
 
 </body>
 </html>
