@@ -5,7 +5,7 @@
 <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
 
 
-<div style="font-family: Arial, Helvetica, sans-serif">
+<div style="font-family: Arial, Helvetica, sans-serif; padding: 10px;">
 
 <b>Trig Function Generator</b> : 
 <span style="color: blue" onclick="SIN = !SIN; draw();"> sin() </span> |
@@ -64,9 +64,10 @@ var TAN_MAX = 3.1;
 var FINE = 0.3;
 var STRONG = 2;
 
-var angle = Math.PI / 3;
+var ARROW_LEN = 0.15;
+var ARROW_WIDTH = 1.08;
 
-angle = 0.0;
+var angle = 0.0;
 
 var tick = function(){
 
@@ -115,6 +116,7 @@ ctx.clearRect(0, 0, 2400, 2400);
 ctx.beginPath();
 ctx.lineWidth = STRONG / 2;
 ctx.strokeStyle = OUTLINE_COLOUR;
+ctx.setLineDash([]);
 
 // Circle
 ctx.arc(CX, CY, RADIUS, 0, 2 * Math.PI);
@@ -269,13 +271,12 @@ ctx.setLineDash([5, 3])
 ctx.stroke();
 
 
-// tangent x interptor
+// tangent x-interptor
 ctx.beginPath();
 ctx.strokeStyle = TAN_COLOUR;
 ctx.setLineDash([])
 ctx.lineWidth = STRONG;
        
-
 TX = CX + RADIUS * Math.cos(angle);
 TY = CY - RADIUS * Math.sin(angle)
 
@@ -319,15 +320,59 @@ ctx.stroke();
 
        
 // sin(), cos(), tan() marker
-if (SIN) circle(PX + PX_scale * angle,PY - Math.sin(angle) * P_height,
-       SIN_COLOUR);
-if (COS) circle(PX + PX_scale * angle,
-       PY - Math.cos(angle) * P_height,
-       COS_COLOUR);
-if (TAN) circle(PX + PX_scale * angle,
-       PY - Math.tan(angle) * P_height,
-       TAN_COLOUR);
-       
+if (SIN) {
+  circle(PX + PX_scale * angle,PY - Math.sin(angle) * P_height,
+         SIN_COLOUR);
+         
+  // join the dots
+  ctx.beginPath();
+  ctx.lineWidth = FINE;
+  ctx.strokeStyle = "gray";
+  ctx.setLineDash([5,3]);
+
+  ctx.moveTo(CX - RADIUS * 1.4,
+             PY - Math.sin(angle) * P_height);
+  ctx.lineTo(PX + PX_scale * angle,
+             PY - Math.sin(angle) * P_height);
+
+  ctx.stroke();
+}
+if (COS) {
+  circle(PX + PX_scale * angle,
+         PY - Math.cos(angle) * P_height,
+         COS_COLOUR);
+         
+  // join the dots
+  ctx.beginPath();
+  ctx.lineWidth = FINE;
+  ctx.strokeStyle = "gray";
+  ctx.setLineDash([5,3]);
+
+  ctx.moveTo(CX - RADIUS * 1.4,
+             PY - Math.cos(angle) * P_height);
+  ctx.lineTo(PX + PX_scale * angle,
+             PY - Math.cos(angle) * P_height);
+
+  ctx.stroke();
+}
+if (TAN) {
+  circle(PX + PX_scale * CROSS_HAIR,
+         PY - Math.tan(angle) * P_height,
+         TAN_COLOUR);
+         
+  // join the dots
+  ctx.beginPath();
+  ctx.lineWidth = FINE;
+  ctx.strokeStyle = "gray";
+  ctx.setLineDash([5,3]);
+
+  ctx.moveTo(CX - RADIUS * 1.4,
+             PY - Math.tan(angle) * P_height);
+  ctx.lineTo(PX + PX_scale * angle,
+             PY - Math.tan(angle) * P_height);
+
+  ctx.stroke();
+}       
 // lines
 ctx.lineWidth = STRONG;
 ctx.setLineDash([]);
@@ -387,10 +432,10 @@ ctx.lineWidth = FINE;
 TX = CX + RADIUS * Math.cos(angle);
 TY = CY - RADIUS * Math.sin(angle)
 
-ctx.moveTo(TX - RADIUS/2 * Math.sin(angle),
-           TY - RADIUS/2 * Math.cos(angle));
-ctx.lineTo(TX + RADIUS/2 * Math.sin(angle),
-           TY + RADIUS/2 * Math.cos(angle));
+ctx.moveTo(TX - RADIUS/1.5 * Math.sin(angle),
+           TY - RADIUS/1.5 * Math.cos(angle));
+ctx.lineTo(TX + RADIUS/1.5 * Math.sin(angle),
+           TY + RADIUS/1.5 * Math.cos(angle));
 
 ctx.stroke();
 
@@ -398,7 +443,7 @@ ctx.stroke();
 
 
 
-// tangent
+// tangent construct
 
 if (TAN) {
 
@@ -416,10 +461,12 @@ ctx.stroke();
 
 */
 
+
+
 ctx.beginPath();
 ctx.lineWidth = STRONG;
 ctx.strokeStyle = TAN_COLOUR;
-ctx.setLineDash([])
+ctx.setLineDash([5,3]);
 
 ctx.moveTo(CX + RADIUS, CY);
 ctx.lineTo(CX + RADIUS, 
@@ -437,9 +484,28 @@ circle(CX + RADIUS, CY - RADIUS * Math.tan(angle), TAN_COLOUR);
 ctx.beginPath();
 ctx.strokeStyle = ANGLE_COLOUR;
 ctx.lineWidth = 0.5;
+ctx.setLineDash([5,3]);
 ctx.arc(CX, CY, RADIUS/2, 0, -angle, 1);
+
 ctx.stroke();
 
+// arrow head
+ctx.beginPath();
+ctx.strokeStyle = ANGLE_COLOUR;
+ctx.lineWidth = 1;
+ctx.setLineDash([]);
+
+
+ctx.moveTo(CX + Math.cos(angle - ARROW_LEN) * RADIUS/2 * ARROW_WIDTH,
+           CY - Math.sin(angle - ARROW_LEN) * RADIUS/2 * ARROW_WIDTH);
+       
+ctx.lineTo(CX + Math.cos(angle) * RADIUS/2,
+           CY - Math.sin(angle) * RADIUS/2);
+       
+ctx.lineTo(CX + Math.cos(angle - ARROW_LEN) * RADIUS/2 / ARROW_WIDTH,
+           CY - Math.sin(angle - ARROW_LEN) * RADIUS/2 / ARROW_WIDTH);
+           
+ctx.stroke();
 
 }     
 
