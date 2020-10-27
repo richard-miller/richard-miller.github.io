@@ -429,6 +429,8 @@ circle(CX,
 
 // opposite
 
+if (SIN || COS) {
+
 ctx.beginPath();
 ctx.strokeStyle = SIN_COLOUR;
 
@@ -441,6 +443,7 @@ ctx.moveTo(CX + RADIUS * Math.cos(angle), CY);
 ctx.lineTo(CX + RADIUS * Math.cos(angle), CY - RADIUS * Math.sin(angle));
 ctx.stroke();
 
+}
 
 // hypot
 ctx.beginPath();
