@@ -319,9 +319,11 @@ ctx.beginPath();
 
 
 // Circle marker
-circle(CX + RADIUS * Math.cos(angle),
-       CY - RADIUS * Math.sin(angle),
-       SIN_COLOUR);
+
+if (SIN) 
+  circle(CX + RADIUS * Math.cos(angle),
+         CY - RADIUS * Math.sin(angle),
+         SIN_COLOUR);
 
 // Plot marker
 circle(PX + PX_scale * angle,
