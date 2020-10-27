@@ -12,8 +12,8 @@
 <span style="color: blue" onclick="COS = !COS; draw()"> cos() </span> |
 <span style="color: blue" onclick="TAN = !TAN; draw()"> tan() </span>
 
-<span style="color: blue" onclick="PAUSE = !PAUSE; if(!PAUSE) tick();">
-  <i style="padding: 5px;" class="icon-play"></i>
+<span style="color: blue" onclick="PAUSE = !PAUSE; if(!PAUSE) { tick(); this.innerHTML = PAUSE_ICON;} else this.innerHTML = PLAY_ICON;">
+  <i style="padding: 5px;" class="icon-pause"></i>
 </span>
 <span style="color: blue" onclick="angle = 0; draw();">
   <i style="padding: 5px;" class="icon-undo"></i>
@@ -33,6 +33,8 @@ var COS = 0;
 var TAN = 0;
 
 var PAUSE = false;
+var PLAY_ICON = '<i style="padding: 5px;" class="icon-play"></i>';
+var PAUSE_ICON = '<i style="padding: 5px;" class="icon-pause"></i>';
 
 // Circle
 var CX = 220;
