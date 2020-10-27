@@ -1,3 +1,6 @@
+<!-- 
+https://www.w3schools.com/tags/tryit.asp
+-->
 <!DOCTYPE html>
 <html>
 <body >
@@ -68,6 +71,7 @@ var STRONG = 2;
 
 var ARROW_LEN = 0.15;
 var ARROW_WIDTH = 1.08;
+var ARROW_SIZE = 6;
 
 var angle = 0.0;
 
@@ -75,12 +79,12 @@ var tick = function(){
 
     draw();
     
-    angle += 0.008; 
+    angle += 0.01; 
     if (angle > 2 * Math.PI) {
         angle = 0.0;
     }
     if (!PAUSE) {
-      setTimeout(tick, 50);
+      setTimeout(tick, 100);
     }
 }
 
@@ -160,6 +164,11 @@ ctx.moveTo(PX - P_OVER, PY);
 ctx.lineTo(PX + P_width + P_OVER, PY);
 ctx.moveTo(PX, PY - P_height * 1.8);
 ctx.lineTo(PX, PY + P_height * 1.8);
+
+ctx.moveTo(PX + P_width + P_OVER - ARROW_SIZE, PY - ARROW_SIZE);
+ctx.lineTo(PX + P_width + P_OVER, PY);
+ctx.lineTo(PX + P_width + P_OVER - ARROW_SIZE, PY + ARROW_SIZE);
+
 ctx.stroke();
 
 // tickmarks
@@ -432,13 +441,14 @@ circle(CX,
 if (SIN || COS) {
 
 ctx.beginPath();
-ctx.strokeStyle = SIN_COLOUR;
+ctx.lineWidth = FINE;
+ctx.strokeStyle = "grey";
 
-if (SIN) 
+if (SIN) {
   ctx.lineWidth = STRONG;
-else 
-  ctx.lineWidth = FINE;
-
+  ctx.strokeStyle = SIN_COLOUR;
+} 
+  
 ctx.moveTo(CX + RADIUS * Math.cos(angle), CY);
 ctx.lineTo(CX + RADIUS * Math.cos(angle), CY - RADIUS * Math.sin(angle));
 ctx.stroke();
