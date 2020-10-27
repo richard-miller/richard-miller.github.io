@@ -139,7 +139,7 @@ ctx.textAlign = "center";
 ctx.fillStyle = "grey";
 ctx.fillText("\u03C0", CX - RADIUS * 1.8, CY);
 ctx.fillText("0", CX + RADIUS * 1.8, CY);
-ctx.fillText("\u03C0/2", CX , CY - RADIUS * 1.8);
+ctx.fillText("\u03C0/2", CX , CY - RADIåUS * 1.8);
 ctx.fillText("3\u03C0/2", CX , CY + RADIUS * 1.8);
 
 ctx.fillText("\u03C0/2", PX + P_width / 4 , PY + 20);
@@ -148,7 +148,7 @@ ctx.fillText("3\u03C0/2", PX + P_width * (3/4) , PY + 20);
 ctx.fillText("2\u03C0", PX + P_width , PY + 20);
 
 ctx.fillText("\u03B8 =", CX - RADIUS, CY - RADIUS);
-ctx.fillText(angle.toString().substring(1, 5), CX - RADIUS + 30, CY - RADIUS);
+ctx.fillText(angle.toString().substring(0, 5), CX - RADIUS + 30, CY - RADIUS);
 
 
 // Plot Axis
