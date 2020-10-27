@@ -18,7 +18,7 @@
 
 </div>
 
-<canvas id="myCanvas" width="1024" height="640" style="border:1px solid #d3d3d3;">
+<canvas id="myCanvas" width="1200" height="600" style="border:1px solid #d3d3d3;">
 Your browser does not support the HTML5 canvas tag.</canvas>
 
 <script>
@@ -38,7 +38,7 @@ var RADIUS = 100;
 var CROSS_HAIR = 1.6
 
 // Plot
-var PX_Offset = 140;
+var PX_Offset = 180;
 var PX = CX + RADIUS * CROSS_HAIR + PX_Offset;
 var PY = CY;
 var P_width = 430;
@@ -105,8 +105,6 @@ function point2angle(p) {
 function draw() {
 
 ctx.clearRect(0, 0, 2400, 2400);
-
-//ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 // Background bits
 ctx.beginPath();
@@ -398,6 +396,8 @@ ctx.stroke();
 // tangent
 
 if (TAN) {
+
+/*
 ctx.beginPath();
 ctx.strokeStyle = TAN_COLOUR;
 ctx.lineWidth = 1;
@@ -409,7 +409,11 @@ ctx.lineTo(CX + RADIUS, CY - RADIUS * Math.tan(angle));
 
 ctx.stroke();
 
+*/
+
 ctx.beginPath();
+ctx.lineWidth = STRONG;
+ctx.strokeStyle = TAN_COLOUR;
 ctx.setLineDash([])
 
 ctx.moveTo(CX + RADIUS, CY);
