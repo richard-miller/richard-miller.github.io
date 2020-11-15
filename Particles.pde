@@ -1,15 +1,16 @@
 int   root_x          = 1024/2;
 int   root_y          = 20;
 
-int   LEVEL_SPACING   = 25;
+int   LEVEL_SPACING   = 35;
 float X_STRETCH       = 0.8;
-int   MAX_LEVELS      = 5;
+
+int   levels          = 5;
+int   MAX_LEVELS      = 15;
 
 int   BALL_SIZE       = 10;
-//int   BALLS           = 1;
-int   balls_desired    = 50;
-int   balls_active    = 10;
-int   MAX_BALLS       = 2000;
+int   balls_desired   = 2;
+int   balls_active    = 2;
+static int   MAX_BALLS       = 500;
 
 Ball[] balls     = new Ball[MAX_BALLS];
 int[]  histogram = new int[MAX_LEVELS];
@@ -19,8 +20,6 @@ void setup() {
   size(1024, 700);
   
   for ( int i=MAX_BALLS; i!=0; balls[--i] = new Ball() );
-
- 
   
   reset();
 } 
@@ -55,13 +54,13 @@ void draw () {
   
   // the bumpers
   fill(64);
-  stroke(32);
-  for (int i=0; i<MAX_LEVELS-1; i+=2) {
+  stroke(200);
+  for (int i=0; i<levels-1; i+=2) {
     for (int j=0; j<i+1; j++) {
       bumper(root_x + int((j-i/2)*LEVEL_SPACING * X_STRETCH * 2), root_y + LEVEL_SPACING * (i+1) + BALL_SIZE);
     }
   }
-  for (int i=1; i<MAX_LEVELS-1; i+=2) {
+  for (int i=1; i<levels-1; i+=2) {
     for (int j = 0; j<i+1; j++) {
       bumper(root_x + int((j-i/2-0.5) * LEVEL_SPACING * X_STRETCH *2), root_y + LEVEL_SPACING * (i+1) + BALL_SIZE);
     }
@@ -69,32 +68,30 @@ void draw () {
   
   stroke(128);
   int bin_x = root_x;
-  int bin_y = root_y + MAX_LEVELS * LEVEL_SPACING + LEVEL_SPACING * 2;
+  int bin_y = root_y + levels * LEVEL_SPACING + LEVEL_SPACING * 1;
   int bin_s = int(LEVEL_SPACING * X_STRETCH);
 
-  line(bin_x - bin_s * MAX_LEVELS, bin_y, 
-       bin_x + bin_s * MAX_LEVELS, bin_y);
+  line(bin_x - bin_s * levels, bin_y, 
+       bin_x + bin_s * levels, bin_y);
   
   // accumulator display
   int all = 0;
-  for (int i=0; i<MAX_LEVELS; i++) { 
+  float sum = 0;
+  for (int i=0; i<levels; i++) { 
     all += histogram[i];
+    sum += histogram[i] * (float(i)/(levels-1));
   }
 
   if (all > 0) {
     fill(0);
-    for (int i=0;i<MAX_LEVELS; i++) {
+    for (int i=0;i<levels; i++) {
      
       fill(color(histogram[i]*512/all, 50, 50, 128));
-      rect(bin_x + (bin_s * (2*i+1 - MAX_LEVELS)) - bin_s,  
+      rect(bin_x + (bin_s * (2*i+1 - levels)) - bin_s,  
             bin_y,
             bin_s * 2,
             800 * histogram[i] / all);
     }
-  }
-  
-  if (all > 30) {
-    //reset();
   }
   
   
@@ -106,39 +103,60 @@ void draw () {
     }
   }
   
+      
   // dash board
   stroke(255);
   fill(128);
-  text("Balls Active:", 20, 20); text(str(balls_active), 100, 20);
-  text("Balls Desired:", 20, 40); text(str(balls_desired), 100, 40);
-  text("Counted:", 20, 60); text(str(all), 100, 60);
+  
+  text("Normal Distribution Generator", 20, 20); 
+  text("Balls:", 20, 50); text(str(balls_desired+1), 100, 50); text("[B] more, [b] less", 135, 50);
+  text("Levels:", 20, 70); text(str(levels), 100, 70);       text("[L] more, [l] less", 135, 70);
+  
+  
+  if (all > 0) {
+    text("n:", 20, 100); text(str(all), 100, 100);
+    text("mean:", 20, 120); text(str(sum/all), 100, 120);
+    //text("sd():", 20, 140); text(str(3.141), 100, 140);
+  }
+  
+  
+
 }
 
 void keyPressed() {
-  if (key == '+') {
-    balls_desired++;
+  if (key == 'B' ) {
+    if (balls_desired == 0) 
+       balls_desired = 1;
+    else
+      balls_desired = ceil(float(balls_desired) * 1.05);
+    if (balls_desired >= MAX_BALLS) balls_desired = MAX_BALLS-1;
   }
+  if (key == 'b' && balls_desired > 0)         balls_desired /= 1.1;
+  if (key == 'L' && levels < MAX_LEVELS)       { levels++; reset(); }
+  if (key == 'l' && levels > 0)                { levels--; reset(); }
 }
-int bumper_width = 6;
-int bumper_height = 24;
+
+int bumper_width = 10;
+int bumper_height = 12;
 
 void bumper(int x, int y) {
-  triangle(x, y, x + bumper_width, y + bumper_height, x - bumper_width, y + bumper_height);
+  triangle(x, y -2 , x + bumper_width, y + bumper_height, x - bumper_width, y + bumper_height);
 }
 
 
-PVector left  = new PVector(-X_STRETCH, 1);
-PVector right = new PVector(+X_STRETCH, 1);
-PVector down  = new PVector(0, 1);
+PVector left  = new PVector(-X_STRETCH*2, 1);
+PVector right = new PVector(+X_STRETCH*2, 1);
+PVector down  = new PVector(0, 1.5);
 
 class Ball {
 
   PVector  direction;
-  float    levels = MAX_LEVELS;
+  float    levels_remaining = levels;
   float    fall;
   float    speed;
   int      rights;
   boolean  active = false;
+  float    r, g, b;
   color    c;
   float    x;
   float    y;
@@ -147,7 +165,7 @@ class Ball {
   }
   
   void drop() {
-    levels = MAX_LEVELS;
+    levels_remaining = levels;
     rights = 0;
     fall   = 0;
     active = true;
@@ -157,18 +175,26 @@ class Ball {
     
     direction = down;
     speed = random(0.5, 1.0);
-    c = color(random( 5,10), random(100, 255), random(100, 255), 128);
+    
+    r = random(5,10);
+    g = random(100, 255);
+    b = random(100, 255);
+    c = color(r, g, b, 128);
   }
   
   public void update() {
     
+    if (fall >= LEVEL_SPACING / 2) {
+      direction = down;
+    }  
+     
     if ( fall >= LEVEL_SPACING) {
       fall = 0;
-      levels --;
+      levels_remaining --;
       
       // 
       
-      if (levels == -1) {
+      if (levels_remaining == -1) {
         histogram[rights] ++;
         active = false;
         balls_active--;
@@ -176,7 +202,7 @@ class Ball {
       }
       else {
         
-        if( levels == 0) {
+        if( levels_remaining == 0) {
           direction = down;
         } 
         else {
