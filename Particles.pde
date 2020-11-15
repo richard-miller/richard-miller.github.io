@@ -53,18 +53,18 @@ void draw () {
   background(0);
   
   // the bumpers
-  fill(64);
-  stroke(200);
-  for (int i=0; i<levels-1; i+=2) {
+  fill(128, 128, 0);
+  stroke(100);
+  for (int i=0; i<levels-1; i++) {
     for (int j=0; j<i+1; j++) {
-      bumper(root_x + int((j-i/2)*LEVEL_SPACING * X_STRETCH * 2), root_y + LEVEL_SPACING * (i+1) + BALL_SIZE);
+      bumper(root_x + int(
+                           (j * 2 - i) * LEVEL_SPACING * X_STRETCH
+                      ),
+             root_y + LEVEL_SPACING * (i+1) + BALL_SIZE);
+      //bumper(root_x + int(j-i/2)*LEVEL_SPACING * X_STRETCH * 2, root_y + LEVEL_SPACING * (i+1) + BALL_SIZE);
     }
   }
-  for (int i=1; i<levels-1; i+=2) {
-    for (int j = 0; j<i+1; j++) {
-      bumper(root_x + int((j-i/2-0.4) * LEVEL_SPACING * X_STRETCH *2), root_y + LEVEL_SPACING * (i+1) + BALL_SIZE);
-    }
-  }
+  
   
   stroke(128);
   int bin_x = root_x;
