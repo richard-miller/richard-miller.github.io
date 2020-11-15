@@ -62,7 +62,7 @@ void draw () {
   }
   for (int i=1; i<levels-1; i+=2) {
     for (int j = 0; j<i+1; j++) {
-      bumper(root_x + int((j-i/2-0.5) * LEVEL_SPACING * X_STRETCH *2), root_y + LEVEL_SPACING * (i+1) + BALL_SIZE);
+      bumper(root_x + int((j-i/2-0.4) * LEVEL_SPACING * X_STRETCH *2), root_y + LEVEL_SPACING * (i+1) + BALL_SIZE);
     }
   }
   
@@ -108,7 +108,7 @@ void draw () {
   stroke(255);
   fill(128);
   
-  text("Normal Distribution Generator", 20, 20); 
+  text("Normal Distribution Generator - v1.0", 20, 20); 
   text("Balls:", 20, 50); text(str(balls_desired+1), 100, 50); text("[B] more, [b] less", 135, 50);
   text("Levels:", 20, 70); text(str(levels), 100, 70);       text("[L] more, [l] less", 135, 70);
   
