@@ -131,7 +131,7 @@ void keyPressed() {
       balls_desired = ceil(float(balls_desired) * 1.05);
     if (balls_desired >= MAX_BALLS) balls_desired = MAX_BALLS-1;
   }
-  if (key == 'b' && balls_desired > 0)         balls_desired /= 1.1;
+  if (key == 'b' && balls_desired > 0)         balls_desired = int(balls_desired/1.1);
   if (key == 'L' && levels < MAX_LEVELS)       { levels++; reset(); }
   if (key == 'l' && levels > 0)                { levels--; reset(); }
 }
