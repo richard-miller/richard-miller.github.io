@@ -10,7 +10,7 @@ int   MAX_LEVELS      = 15;
 int   BALL_SIZE       = 10;
 int   balls_desired   = 2;
 int   balls_active    = 2;
-static int   MAX_BALLS       = 500;
+static int   MAX_BALLS       = 5000;
 
 Ball[] balls     = new Ball[MAX_BALLS];
 int[]  histogram = new int[MAX_LEVELS];
